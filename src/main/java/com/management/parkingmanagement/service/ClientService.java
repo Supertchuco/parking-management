@@ -30,12 +30,7 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
-    public BigDecimal discountDebitFromAccountBalance(final BigDecimal debit, final String clientEmail){
-        Client client = clientRepository.findByEmail(clientEmail);
-        if(Objects.isNull(client)){
-            //return erro
-        }
-
+    public BigDecimal updateDebitFromClientAccountBalance(final BigDecimal debit, final Client client){
         client.getWallet().setBalanceAccount( client.getWallet().getBalanceAccount().subtract(debit));
         saveClient(client);
         return client.getWallet().getBalanceAccount();

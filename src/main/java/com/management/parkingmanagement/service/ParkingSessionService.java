@@ -3,6 +3,7 @@ package com.management.parkingmanagement.service;
 import com.management.parkingmanagement.entities.Park;
 import com.management.parkingmanagement.entities.ParkingSession;
 import com.management.parkingmanagement.entities.Vehicle;
+import com.management.parkingmanagement.exception.ParkingSessionServiceException;
 import com.management.parkingmanagement.repository.ParkingSessionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -25,9 +25,15 @@ public class ParkingSessionService {
     private ParkService parkService;
 
     @Autowired
+    private ClientService clientService;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private ParkingSessionRepository parkingSessionRepository;
 
-    private int getDifferenceInMinutes(final Date initDate, final Date finalDate) {
+    private int getTotalMinutesInParking(final Date initDate, final Date finalDate) {
         //maybe need to %60
         return Minutes.minutesBetween(new DateTime(initDate), new DateTime(finalDate)).getMinutes();
     }
@@ -39,37 +45,47 @@ public class ParkingSessionService {
 
     private boolean createParkingSession() {
 
+
         Vehicle vehicle = vehicleService.findByNumberPlate("numberPlate");
 
-        if (Objects.isNull(vehicle)) {
-            // carro não encontrado erro
-        }
+        vehicleService.validateVehicle(vehicle);
 
         Park park = parkService.findParkByParkName("park name");
 
-        if (Objects.isNull(park) || !park.isActive()) {
-            // não encontrado erro ou não ativo
+        parkService.validatePark(park);
+
+        try {
+            ParkingSession parkingSession = new ParkingSession(new Date(), vehicle, park);
+            parkingSessionRepository.save(parkingSession);
+        } catch (Exception e) {
+            log.error("Error to save parking session", e);
+            throw new ParkingSessionServiceException("Error to save parking session");
         }
 
-        ParkingSession parkingSession = new ParkingSession(new Date(), vehicle, park);
-        parkingSessionRepository.save(parkingSession);
 
         return true;
     }
 
 
-
-    private boolean finishParkingSession(){
+    public boolean finishParkingSession() {
 
         ParkingSession parkingSession = null;//parkingSessionRepository.fi
 
-        Date finishDate = new Date();
-        int totalMinutes = getDifferenceInMinutes(parkingSession.getStarted(), new Date());
+        Vehicle vehicle = vehicleService.findByNumberPlate("");
+
+        vehicleService.validateVehicle(vehicle);
+
+        int totalMinutes = getTotalMinutesInParking(parkingSession.getStarted(), new Date());
         BigDecimal finalPriceToPay = calculateValueToPay(totalMinutes, parkingSession.getPark().getPrice().getPriceFor15Minutes());
 
+        BigDecimal debitRest = clientService.updateDebitFromClientAccountBalance(finalPriceToPay, vehicle.getClient());
 
+        if (debitRest.compareTo(new BigDecimal(0)) == 1) {
+            emailService.sendHTMLEmail(vehicle.getClient().getEmail(), "", "");
+        }
 
         return true;
     }
+
 
 }
