@@ -10,7 +10,6 @@ import java.util.Date;
 @Data
 @Entity(name = "ParkingSession")
 @Table(name = "ParkingSession")
-@NoArgsConstructor
 public class ParkingSession implements Serializable {
 
     @Id
@@ -33,4 +32,10 @@ public class ParkingSession implements Serializable {
     @OneToOne
     @JoinColumn(name = "parkId")
     private Park park;
+
+    public ParkingSession(Date started, Vehicle vehicle, Park park){
+        this.started = started;
+        this.vehicle = vehicle;
+        this.park = park;
+    }
 }

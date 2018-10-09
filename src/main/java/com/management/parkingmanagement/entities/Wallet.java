@@ -20,6 +20,11 @@ public class Wallet implements Serializable {
     private int walletId;
 
     @Column
-    private BigDecimal money;
+    private BigDecimal balanceAccount;
+
+    @OneToOne
+    @JoinColumn(name = "email")
+    @JsonBackReference
+    private Client client;
 
 }

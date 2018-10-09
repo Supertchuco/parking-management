@@ -1,5 +1,6 @@
 package com.management.parkingmanagement.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,7 +27,7 @@ public class Park implements Serializable {
     @Column
     private boolean active;
 
-    @OneToOne
-    @JoinColumn(name = "priceId")
+    @OneToOne(mappedBy = "park", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Price price;
 }

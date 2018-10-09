@@ -9,5 +9,5 @@ import java.util.Collection;
 @Repository
 public interface VehicleRepository extends CrudRepository<Vehicle, Long> {
 
-    Collection<Vehicle> findByNumberPlate(String numberPlate);
+    Vehicle findByNumberPlate(String numberPlate);
 }

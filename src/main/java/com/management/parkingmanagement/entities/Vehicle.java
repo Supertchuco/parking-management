@@ -1,5 +1,6 @@
 package com.management.parkingmanagement.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -19,8 +20,9 @@ public class Vehicle implements Serializable {
     @Column
     private String model;
 
-/*    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "email")
-    private Client client;*/
+    @ManyToOne
+    @JsonManagedReference
+    @JoinColumn(name = "email", nullable = false)
+    private Client client;
 
 }

@@ -9,5 +9,5 @@ import java.util.Collection;
 @Repository
 public interface ClientRepository extends CrudRepository<Client, Long> {
 
-    Collection<Client> findByEmail(String email);
+   Client findByEmail(final String email);
 }

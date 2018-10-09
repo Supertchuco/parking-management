@@ -1,5 +1,6 @@
 package com.management.parkingmanagement.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -20,14 +21,11 @@ public class Client implements Serializable {
     @Column
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "walletId")
+    @OneToOne(mappedBy = "wallet", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Wallet wallet;
 
-    @OneToMany(
-            mappedBy = "client",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "client")
+    @JsonManagedReference
     private List<Vehicle> vehicles;
 }

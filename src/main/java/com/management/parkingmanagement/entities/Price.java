@@ -1,11 +1,9 @@
 package com.management.parkingmanagement.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -20,5 +18,10 @@ public class Price implements Serializable {
 
     @Column
     private BigDecimal priceFor15Minutes;
+
+    @OneToOne
+    @JoinColumn(name = "parkId")
+    @JsonBackReference
+    private Park park;
 
 }

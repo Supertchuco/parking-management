@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ParkingSessionRepository extends CrudRepository<ParkingSession, Long> {
+
+    //ParkingSession findByParkName(String parkName);
 }

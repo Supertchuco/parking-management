@@ -24,7 +24,7 @@ public class DatabaseLoader implements CommandLineRunner {
     public void run(String... strings) {
 
 
-        this.clientRepository.save(new Client("test@gmail.com", "1234", new Wallet(1, new BigDecimal(200.0)), Arrays.asList(new Vehicle("IGL6969", "Sentra"))));
+      //  this.clientRepository.save(new Client("test@gmail.com", "1234", new Wallet(1, new BigDecimal(200.0)), Arrays.asList(new Vehicle("IGL6969", "Sentra"))));
 
 
     }
