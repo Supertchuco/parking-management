@@ -30,7 +30,7 @@ public class ParkService {
     }
 
     public void validatePark(final Park park) {
-        if (Objects.isNull(park) || !park.isActive()) {
+        if (Objects.isNull(park)) {
             log.error("park not found");
             throw new ParkNotFoundException("park not found");
         }

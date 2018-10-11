@@ -18,6 +18,13 @@ public class ExceptionResourceHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(InvalidEmailDataException.class)
+    public final ResponseEntity<ExceptionResponse> handleInvalidEmailDataException(WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Error to send e-mail invoice to client",
+                request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(EmailServiceException.class)
     public final ResponseEntity<ExceptionResponse> handleEmailServiceException(WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Error to send e-mail invoice to client",

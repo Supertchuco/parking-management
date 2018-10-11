@@ -1,5 +1,6 @@
 package com.management.parkingmanagement.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.util.Date;
 @Data
 @Entity(name = "ParkingSession")
 @Table(name = "ParkingSession")
+@AllArgsConstructor
 public class ParkingSession implements Serializable {
 
     @Id

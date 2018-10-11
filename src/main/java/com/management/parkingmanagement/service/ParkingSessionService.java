@@ -101,7 +101,7 @@ public class ParkingSessionService {
         }
 
         if (invoice.compareTo(BigDecimal.ZERO) > 0) {
-            emailService.sendHTMLEmail(vehicle.getClient().getEmail(), emailService.buildEmailBody(invoice, parkingSession, park, vehicle), "Parking Session Invoice");
+            emailService.sendHtmlEmail(vehicle.getClient().getEmail(), emailService.buildEmailBody(invoice, parkingSession, park, vehicle), "Parking Session Invoice");
         }
 
         log.info("Session finished");
@@ -117,7 +117,6 @@ public class ParkingSessionService {
     }
 
     public Collection<ParkingSession> findAll() {
-
         return parkingSessionRepository.findAll();
     }
 
