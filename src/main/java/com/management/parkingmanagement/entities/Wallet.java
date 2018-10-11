@@ -3,6 +3,7 @@ package com.management.parkingmanagement.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 @Entity(name = "Wallet")
 @Table(name = "Wallet")
 @AllArgsConstructor
+@NoArgsConstructor
 public class Wallet implements Serializable {
 
     @Id
@@ -21,6 +23,7 @@ public class Wallet implements Serializable {
 
     @Column
     private BigDecimal balanceAccount;
+
 
     @OneToOne
     @JoinColumn(name = "email")

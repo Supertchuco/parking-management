@@ -1,7 +1,6 @@
 package com.management.parkingmanagement.entities;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,24 +17,20 @@ public class ParkingSession implements Serializable {
     private int sessionId;
 
     @Column
-    @Temporal(TemporalType.TIME)
     private Date started;
 
     @Column
-    @Temporal(TemporalType.TIME)
     private Date finished;
 
-    @OneToOne
-    @JoinColumn(name = "numberPlate")
-    private Vehicle vehicle;
+    @Column
+    private String plateNumber;
 
-    @OneToOne
-    @JoinColumn(name = "parkId")
-    private Park park;
+    @Column
+    private int parkId;
 
-    public ParkingSession(Date started, Vehicle vehicle, Park park){
+    public ParkingSession(Date started, String plateNumber, int parkId) {
         this.started = started;
-        this.vehicle = vehicle;
-        this.park = park;
+        this.plateNumber = plateNumber;
+        this.parkId = parkId;
     }
 }

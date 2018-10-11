@@ -1,6 +1,7 @@
 package com.management.parkingmanagement.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,13 +11,14 @@ import java.io.Serializable;
 @Data
 @Entity(name = "Park")
 @Table(name = "Park")
+@AllArgsConstructor
 @NoArgsConstructor
 public class Park implements Serializable {
 
     @Id
     @GeneratedValue
     @Column
-    private int parkId;
+    private int id;
 
     @Column
     private String parkName;

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -16,23 +15,23 @@ public class ClientService {
     @Autowired
     ClientRepository clientRepository;
 
-
-    public BigDecimal getAccountBalance(final String clientEmail){
-        Client client = clientRepository.findByEmail(clientEmail);
-        if(Objects.isNull(client)){
-            //return erro
-        }
-
-        return client.getWallet().getBalanceAccount();
-    }
-
-    public Client saveClient(final Client client){
+    public Client saveClient(final Client client) {
         return clientRepository.save(client);
     }
 
-    public BigDecimal updateDebitFromClientAccountBalance(final BigDecimal debit, final Client client){
-        client.getWallet().setBalanceAccount( client.getWallet().getBalanceAccount().subtract(debit));
+    public BigDecimal updateDebitFromClientAccountBalance(final BigDecimal debit, final Client client) {
+        log.info("Update debit from client account balance");
+        BigDecimal accountBalance = client.getWallet().getBalanceAccount().subtract(debit);
+        BigDecimal invoice;
+        if (accountBalance.compareTo(BigDecimal.ZERO) < 0) {
+            client.getWallet().setBalanceAccount(BigDecimal.ZERO);
+            invoice = accountBalance.abs();
+        } else {
+            client.getWallet().setBalanceAccount(accountBalance);
+            invoice = BigDecimal.ZERO;
+        }
+        client.getWallet().setBalanceAccount((accountBalance.compareTo(BigDecimal.ZERO) < 0) ? BigDecimal.ZERO : accountBalance);
         saveClient(client);
-        return client.getWallet().getBalanceAccount();
+        return invoice;
     }
 }

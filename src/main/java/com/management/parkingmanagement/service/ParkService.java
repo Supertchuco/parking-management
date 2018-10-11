@@ -3,6 +3,7 @@ package com.management.parkingmanagement.service;
 import com.management.parkingmanagement.entities.Park;
 import com.management.parkingmanagement.exception.ParkIsNotActiveException;
 import com.management.parkingmanagement.exception.ParkNotFoundException;
+import com.management.parkingmanagement.exception.ParkServiceException;
 import com.management.parkingmanagement.repository.ParkRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,18 @@ public class ParkService {
     @Autowired
     ParkRepository parkRepository;
 
-    public Park findParkByParkName(final String parkName) {
-        return parkRepository.findByParkName(parkName);
+    public Park findParkByParkId(final int parkId) {
+        log.info("Find park by id");
+        try {
+            return parkRepository.findById(parkId);
+        } catch (Exception e) {
+            log.error("Intern error to find park", e);
+            throw new ParkServiceException("Intern error to find park");
+        }
+
     }
 
-    public void validatePark(Park park) {
+    public void validatePark(final Park park) {
         if (Objects.isNull(park) || !park.isActive()) {
             log.error("park not found");
             throw new ParkNotFoundException("park not found");
