@@ -17,11 +17,11 @@ public class VehicleService {
     @Autowired
     VehicleRepository vehicleRepository;
 
-    public Vehicle findByPlateNumber(final String numberPlate){
+    public Vehicle findByPlateNumber(final String numberPlate) {
         try {
             log.info("find vehicle by number plate");
             return vehicleRepository.findByPlateNumber(numberPlate);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("Intern error to find vehicle", e);
             throw new VehicleServiceException("Intern error to find vehicle");
         }

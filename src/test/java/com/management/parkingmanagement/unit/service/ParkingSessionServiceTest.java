@@ -1,11 +1,8 @@
 package com.management.parkingmanagement.unit.service;
 
-import com.management.parkingmanagement.entities.*;
-import com.management.parkingmanagement.exception.ParkingSessionServiceException;
+import com.management.parkingmanagement.entities.ParkingSession;
 import com.management.parkingmanagement.repository.ParkingSessionRepository;
 import com.management.parkingmanagement.service.*;
-import com.management.parkingmanagement.vo.FinishingSessionVO;
-import com.management.parkingmanagement.vo.StartingSessionVO;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,8 +23,6 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyObject;
-import static org.mockito.Mockito.doThrow;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ParkingSessionServiceTest {
@@ -118,53 +113,6 @@ public class ParkingSessionServiceTest {
         method = buildInvokePrivateMethod("calculateValueToPay", Arrays.asList(int.class, BigDecimal.class), Arrays.asList(45, new BigDecimal(20.05)));
         BigDecimal result = (BigDecimal) method.invoke(parkingSessionService, parameters);
         assertTrue(result.compareTo(new BigDecimal("60.15")) == 0);
-    }
-
-    @Test
-    public void createParkingSessionTestHappyScenario() {
-        Mockito.when(vehicleService.findByPlateNumber(Mockito.anyString())).thenReturn(new Vehicle("TEST123", "Gol", null));
-        Mockito.when(parkService.findParkByParkId(1)).thenReturn(new Park(1, "TEST123", "Test", true, null));
-        assertTrue(parkingSessionService.createParkingSession(new StartingSessionVO("test444"), "1"));
-    }
-
-    @Test(expected = ParkingSessionServiceException.class)
-    public void createParkingSessionTestWhenExceptionOccurredDuringSaveOperation() {
-        Mockito.when(vehicleService.findByPlateNumber(Mockito.anyString())).thenReturn(new Vehicle("TEST123", "Gol", null));
-        Mockito.when(parkService.findParkByParkId(1)).thenReturn(new Park(1, "TEST123", "Test", true, null));
-        doThrow(IllegalStateException.class)
-                .when(parkingSessionRepository).save(anyObject());
-        parkingSessionService.createParkingSession(new StartingSessionVO("test444"), "1");
-    }
-
-    @Test
-    public void finishParkingSessionTestHappyScenarioWithInvoiceEmail() {
-        Mockito.when(parkingSessionRepository.getOpenParkingSessionByParkIdAndPlateNumber(Mockito.anyString(), Mockito.anyInt())).thenReturn(new ParkingSession(new Date(), "test123", 1));
-        Mockito.when(vehicleService.findByPlateNumber(Mockito.anyString())).thenReturn(new Vehicle("test123", "Gol", new Client("emailTest", "passtest", null, null)));
-        Mockito.when(parkService.findParkByParkId(1)).thenReturn(new Park(1, "TEST123", "Test", true, new Price(1, new BigDecimal("10.00"), null)));
-        Mockito.when(emailService.sendHtmlEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn("SUCCESS");
-        Mockito.when(clientService.updateDebitFromClientAccountBalance(Mockito.anyObject(), Mockito.anyObject())).thenReturn(new BigDecimal("11.00"));
-        Mockito.when(emailService.buildEmailBody(Mockito.anyObject(), Mockito.anyObject(), Mockito.anyObject(), Mockito.anyObject())).thenReturn("email body");
-        assertTrue(parkingSessionService.finishParkingSession(new FinishingSessionVO("stopped"), "1", "test123"));
-
-    }
-
-    @Test
-    public void finishParkingSessionTestHappyScenarioWithoutInvoiceEmail() {
-        Mockito.when(parkingSessionRepository.getOpenParkingSessionByParkIdAndPlateNumber(Mockito.anyString(), Mockito.anyInt())).thenReturn(new ParkingSession(new Date(), "test123", 1));
-        Mockito.when(vehicleService.findByPlateNumber(Mockito.anyString())).thenReturn(new Vehicle("test123", "Gol", new Client("emailTest", "passtest", null, null)));
-        Mockito.when(parkService.findParkByParkId(1)).thenReturn(new Park(1, "TEST123", "Test", true, new Price(1, new BigDecimal("10.00"), null)));
-        Mockito.when(clientService.updateDebitFromClientAccountBalance(Mockito.anyObject(), Mockito.anyObject())).thenReturn(BigDecimal.ZERO);
-        assertTrue(parkingSessionService.finishParkingSession(new FinishingSessionVO("stopped"), "1", "test123"));
-    }
-
-    @Test(expected = ParkingSessionServiceException.class)
-    public void finishParkingSessionTestHappyScenarioWithExceptionOccurred() {
-        Mockito.when(parkingSessionRepository.getOpenParkingSessionByParkIdAndPlateNumber(Mockito.anyString(), Mockito.anyInt())).thenReturn(new ParkingSession(new Date(), "test123", 1));
-        Mockito.when(vehicleService.findByPlateNumber(Mockito.anyString())).thenReturn(new Vehicle("test123", "Gol", new Client("emailTest", "passtest", null, null)));
-        Mockito.when(parkService.findParkByParkId(1)).thenReturn(new Park(1, "TEST123", "Test", true, new Price(1, new BigDecimal("10.00"), null)));
-        doThrow(IllegalStateException.class)
-                .when(clientService).updateDebitFromClientAccountBalance(anyObject(), anyObject());
-        parkingSessionService.finishParkingSession(new FinishingSessionVO("stopped"), "1", "test123");
     }
 
 }

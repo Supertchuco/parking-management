@@ -71,7 +71,7 @@ public class ExceptionResourceHandler extends ResponseEntityExceptionHandler {
     public final ResponseEntity<ExceptionResponse> handlePendentParkSessionException(WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Error, this client has pendent(s) park sessions, please contact support",
                 request.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(VehicleNotFoundException.class)
@@ -92,7 +92,7 @@ public class ExceptionResourceHandler extends ResponseEntityExceptionHandler {
     public final ResponseEntity<ExceptionResponse> handleNotStoppedStatusOnPayloadException(WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Error, Not stopped status on payload during finish parking session process",
                 request.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
 }

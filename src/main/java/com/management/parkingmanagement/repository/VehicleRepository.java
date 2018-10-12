@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VehicleRepository extends CrudRepository<Vehicle, Long> {
 
-    Vehicle findByPlateNumber(String plateNumber);
+    Vehicle findByPlateNumber(final String plateNumber);
 }

@@ -77,7 +77,7 @@ public class ParkingSessionService {
     public boolean finishParkingSession(FinishingSessionVO finishingSessionVO, String parkId, String plateNumber) {
         log.info("finish parking session for this park id {} and number plate {}", parkId, plateNumber);
 
-        if(!StringUtils.equals(finishingSessionVO.getStatus(), "stopped")){
+        if (!StringUtils.equals(finishingSessionVO.getStatus(), "stopped")) {
             log.error("Not stopped status on payload");
             throw new NotStoppedStatusOnPayloadException("Not stopped status on payload during finish parking session process");
         }
@@ -122,10 +122,6 @@ public class ParkingSessionService {
             log.error("vehicle with pendent parking session");
             throw new PendentParkSessionException("vehicle with opened parking session");
         }
-    }
-
-    public Collection<ParkingSession> findAll() {
-        return parkingSessionRepository.findAll();
     }
 
 }
