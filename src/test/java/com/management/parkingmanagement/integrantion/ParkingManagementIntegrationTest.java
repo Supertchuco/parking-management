@@ -20,9 +20,9 @@ import static org.junit.Assert.assertEquals;
 @Sql({"/sql/purge.sql", "/sql/seed.sql"})
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class ParkingManagementIntegrantionTest {
+public class ParkingManagementIntegrationTest {
 
-    private static final String requestBaseEndpoint = "http://localhost:8090/pms/v1/assets";
+    private static final String requestBaseEndpoint = "https://localhost:8443/pms/v1/assets";
 
     @Autowired
     private TestRestTemplate testRestTemplate;

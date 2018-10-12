@@ -23,7 +23,7 @@ You can check the all rest operations and the payloads through Swagger, to do it
 
 This project have these kind of tests:
 
-    Integration Tests (8 tests): ParkingManagementIntegrantionTest classes;
+    Integration Tests (8 tests): ParkingManagementIntegrationTest class;
     Unity Tests (26 tests) for all services classes.
 	
 	The integrantion tests are using memory database (H2) and create the data, you can verify it on seed.sql and purge.sql files.
@@ -44,7 +44,7 @@ Step to running the project:
         Execute the command "gradlew clean build" inside the project in a cmd prompt;
         Execute command "java -jar Jparking-management.jar" in "parking-management\build\libs" directory.
 
-In both of cases you can check if the application is running accessing this url "http://localhost:8090/productManagement/api/health" (actuator feature);
+In both of cases you can check if the application is running accessing this url "http://localhost:8090/pms/actuator/health" (actuator feature);
 
 Important Note: This project is configured to create the database tables structure every time that the application is started, if you want to disable it, you need to comment (#) or delete this line "spring.jpa.hibernate.ddl-auto=update" on application.properties.
 
