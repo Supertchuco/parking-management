@@ -88,4 +88,11 @@ public class ExceptionResourceHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(NotStoppedStatusOnPayloadException.class)
+    public final ResponseEntity<ExceptionResponse> handleNotStoppedStatusOnPayloadException(WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Error, Not stopped status on payload during finish parking session process",
+                request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

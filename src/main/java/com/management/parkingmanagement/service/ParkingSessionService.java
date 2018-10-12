@@ -3,6 +3,7 @@ package com.management.parkingmanagement.service;
 import com.management.parkingmanagement.entities.Park;
 import com.management.parkingmanagement.entities.ParkingSession;
 import com.management.parkingmanagement.entities.Vehicle;
+import com.management.parkingmanagement.exception.NotStoppedStatusOnPayloadException;
 import com.management.parkingmanagement.exception.ParkingSessionNotFoundException;
 import com.management.parkingmanagement.exception.ParkingSessionServiceException;
 import com.management.parkingmanagement.exception.PendentParkSessionException;
@@ -11,6 +12,7 @@ import com.management.parkingmanagement.vo.FinishingSessionVO;
 import com.management.parkingmanagement.vo.StartingSessionVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +53,7 @@ public class ParkingSessionService {
         if (timeFrames == 0) {
             timeFrames = 1;
         }
-        return new BigDecimal(timeFrames).multiply(valueTo15Minutes);
+        return new BigDecimal(timeFrames).multiply(valueTo15Minutes).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     public boolean createParkingSession(final StartingSessionVO startingSessionVO, final String parkId) {
@@ -74,6 +76,12 @@ public class ParkingSessionService {
 
     public boolean finishParkingSession(FinishingSessionVO finishingSessionVO, String parkId, String plateNumber) {
         log.info("finish parking session for this park id {} and number plate {}", parkId, plateNumber);
+
+        if(!StringUtils.equals(finishingSessionVO.getStatus(), "stopped")){
+            log.error("Not stopped status on payload");
+            throw new NotStoppedStatusOnPayloadException("Not stopped status on payload during finish parking session process");
+        }
+
         ParkingSession parkingSession = parkingSessionRepository.getOpenParkingSessionByParkIdAndPlateNumber(plateNumber, Integer.parseInt(parkId));
 
         if (Objects.isNull(parkingSession)) {

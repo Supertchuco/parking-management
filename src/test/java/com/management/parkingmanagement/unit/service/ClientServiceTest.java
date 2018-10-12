@@ -35,18 +35,18 @@ public class ClientServiceTest {
     }
 
     @Test
-    public void updateDebitFromClientAccountBalanceTestWhenClientHasAccountBalance(){
+    public void updateDebitFromClientAccountBalanceTestWhenClientHasAccountBalance() {
         assertEquals(new BigDecimal(0), clientService.updateDebitFromClientAccountBalance(new BigDecimal(100), client));
     }
 
     @Test
-    public void updateDebitFromClientAccountBalanceTestWhenClientNotHasAccountBalanceEnough(){
+    public void updateDebitFromClientAccountBalanceTestWhenClientNotHasAccountBalanceEnough() {
         client.getWallet().setBalanceAccount(new BigDecimal(50));
         assertEquals(new BigDecimal(50), clientService.updateDebitFromClientAccountBalance(new BigDecimal(100), client));
     }
 
     @Test
-    public void updateDebitFromClientAccountBalanceTestWhenClientHas0AccountBalanceEnough(){
+    public void updateDebitFromClientAccountBalanceTestWhenClientHas0AccountBalanceEnough() {
         client.getWallet().setBalanceAccount(BigDecimal.ZERO);
         assertEquals(new BigDecimal(100), clientService.updateDebitFromClientAccountBalance(new BigDecimal(100), client));
     }
