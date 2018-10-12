@@ -29,6 +29,7 @@ dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
 	implementation('org.springframework.boot:spring-boot-starter-data-rest')
 	implementation('org.springframework.boot:spring-boot-starter-web')
+	compile group: 'commons-io', name: 'commons-io', version: '2.6'
 	compile group: 'joda-time', name: 'joda-time', version: '2.10'
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile group: 'org.apache.commons', name: 'commons-email', version: '1.5'
